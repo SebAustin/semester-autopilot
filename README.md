@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Semester Autopilot
 
-## Getting Started
+**GPS for your semester.** Drop in your syllabi — get every deadline on one
+timeline, a grade-aware study plan, and a schedule that reroutes itself when
+life happens.
 
-First, run the development server:
+Built solo for [ReverieHacks 2026](https://reveriehacks.org) (Software
+Development track).
+
+## Why
+
+Every semester, students hand-transcribe 4–6 syllabus PDFs into calendars,
+miss buried deadlines anyway, and have no idea which assignment actually
+moves their grade. Semester Autopilot does the transcription with AI you can
+correct, then plans the work with a deterministic engine you can trust:
+
+- **Ingest** — upload a syllabus PDF (or paste text / a course URL). An LLM
+  extracts deadlines, grading weights, and meeting times into a review table.
+  You confirm; nothing enters your semester unreviewed.
+- **Semester view** — one timeline across all courses, workload heatmap, and
+  one-click `.ics` export to Google/Apple Calendar.
+- **Autopilot planner** — set your weekly hours; a deterministic scheduler
+  spreads the work by grade weight and urgency. Miss a day, and your plan
+  visibly *reroutes* — like GPS.
+- **Grade what-if** — "what happens if I skip this?" and "what do I need on
+  the final?", weighted correctly.
+
+**Local-first**: your data lives in your browser. No account, no database.
+
+## Stack
+
+Next.js (App Router) · TypeScript · Tailwind v4 · zustand · Vercel AI SDK
+(Featherless.AI, OpenAI-compatible) · Firecrawl · Motion · deployed on Vercel.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local   # add your keys (see below)
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Runs at http://localhost:3000. Without keys, set `LLM_MOCK=1` to use fixture
+extraction responses — everything except live LLM calls works offline.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Purpose |
+| --- | --- |
+| `LLM_BASE_URL` | OpenAI-compatible endpoint (e.g. `https://api.featherless.ai/v1`) |
+| `LLM_API_KEY` | API key for that endpoint |
+| `LLM_MODEL_ID` | Model id (e.g. `meta-llama/Meta-Llama-3.1-70B-Instruct`) |
+| `FIRECRAWL_API_KEY` | Course-page URL import (optional) |
+| `LLM_MOCK` | `1` = fixture extraction, no network (used by e2e) |
 
-## Learn More
+### Scripts
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm test        # unit tests (runs twice: America/Chicago + Pacific/Kiritimati)
+pnpm coverage    # unit tests + v8 coverage
+pnpm e2e         # Playwright happy path (builds first, LLM_MOCK=1)
+pnpm typecheck   # tsc --noEmit
+pnpm build       # production build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[MIT](./LICENSE) © 2026 Sebastien Henry

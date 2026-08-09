@@ -1,0 +1,43 @@
+CS 3110: Data Structures and Functional Programming
+Hartwell University — Fall 2026
+Instructor: Prof. Dana Okafor (okafor@hartwell.edu)
+Lectures: MWF 10:10–11:00, Gates Hall G01
+Recitation: Tue 2:55–4:10 (sections vary)
+
+COURSE DESCRIPTION
+Advanced programming course focusing on functional programming, data
+structures, and reasoning about program correctness in OCaml.
+
+GRADING BREAKDOWN
+Component            Weight
+Problem Sets (6)     30%
+Prelim 1             15%
+Prelim 2             15%
+Final Exam           25%
+Programming Project  10%
+Participation        5%
+
+Letter grades follow the standard university scale. The lowest problem
+set score is dropped.
+
+SCHEDULE OF ASSESSMENTS
+PS1  due Fri Sep 4
+PS2  due Fri Sep 18
+PS3  due Fri Oct 2
+Prelim 1: Thursday, October 8, 7:30pm (Uris Hall Auditorium)
+PS4  due Fri Oct 23
+Prelim 2: Thursday, November 5, 7:30pm
+PS5  due Fri Nov 13
+Project milestone (design doc): Week of Nov 16
+PS6  due Fri Dec 4
+Final project due: Wednesday, December 9, 11:59pm
+Final Exam: date TBD (registrar schedules finals in November)
+
+LATE POLICY
+Problem sets may be submitted up to 48 hours late with a 10% penalty per
+24-hour period. Prelims and the final cannot be made up without a dean's
+excuse.
+
+ACADEMIC INTEGRITY
+All submitted code must be your own. Pair programming is permitted on
+problem sets only, with your recitation partner.
