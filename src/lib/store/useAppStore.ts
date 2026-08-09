@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { buildDemoData } from "../demo/syllabi";
+import { buildDemoData, DEMO_VERSION } from "../demo/syllabi";
 import { todayISO } from "../dates/iso";
 import type {
   Course,
@@ -35,6 +35,7 @@ interface PersistedState {
   availability: UserAvailability;
   semester: SemesterSettings | null;
   demoLoadedAt?: string;
+  demoVersion?: number;
 }
 
 export interface AppState extends PersistedState {
@@ -187,10 +188,12 @@ export const useAppStore = create<AppState>()(
           semester: demo.semester,
           availability: demo.availability,
           demoLoadedAt: new Date().toISOString(),
+          demoVersion: DEMO_VERSION,
         });
       },
 
-      resetAll: () => set({ ...initialState, demoLoadedAt: undefined }),
+      resetAll: () =>
+        set({ ...initialState, demoLoadedAt: undefined, demoVersion: undefined }),
 
       exportJson: () => {
         const { courses, deliverables, availability, semester } = get();
@@ -232,6 +235,7 @@ export const useAppStore = create<AppState>()(
         availability: state.availability,
         semester: state.semester,
         demoLoadedAt: state.demoLoadedAt,
+        demoVersion: state.demoVersion,
       }),
     },
   ),

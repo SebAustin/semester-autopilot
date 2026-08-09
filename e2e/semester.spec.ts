@@ -18,6 +18,14 @@ test("demo semester: timeline renders, .ics exports, done-state persists", async
   const tickCount = await page.getByTestId("timeline-tick").count();
   expect(tickCount).toBeGreaterThanOrEqual(20);
 
+  // Regression guard: course-hue CSS variables are consumed via inline style,
+  // which Tailwind can't see — if theme pruning returns, ticks go transparent.
+  const tickBg = await page
+    .getByTestId("timeline-tick")
+    .first()
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(tickBg).not.toBe("rgba(0, 0, 0, 0)");
+
   const [download] = await Promise.all([
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Export .ics" }).click(),

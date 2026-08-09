@@ -16,6 +16,9 @@ import { EFFORT_DEFAULTS } from "../types";
  * regardless of when they click. Static dates would strand them at week 0.
  */
 
+/** Bump when demo content changes — stale persisted demos auto-refresh. */
+export const DEMO_VERSION = 2;
+
 export interface DemoData {
   courses: Record<string, Course>;
   deliverables: Record<string, Deliverable>;

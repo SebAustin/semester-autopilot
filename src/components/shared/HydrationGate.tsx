@@ -2,6 +2,7 @@
 
 import { useEffect, useSyncExternalStore, type ReactNode } from "react";
 
+import { DEMO_VERSION } from "@/lib/demo/syllabi";
 import { useAppStore } from "@/lib/store/useAppStore";
 
 /**
@@ -20,6 +21,16 @@ export function HydrationGate({ children }: { children: ReactNode }) {
   useEffect(() => {
     void useAppStore.persist.rehydrate();
   }, []);
+
+  // A browser that loaded an older demo (e.g. a judge who clicked "try demo"
+  // before a content update) silently gets the current demo semester.
+  useEffect(() => {
+    if (!isHydrated) return;
+    const state = useAppStore.getState();
+    if (state.demoLoadedAt && state.demoVersion !== DEMO_VERSION) {
+      state.loadDemoData();
+    }
+  }, [isHydrated]);
 
   if (!isHydrated) {
     return (
