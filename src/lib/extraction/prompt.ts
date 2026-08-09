@@ -87,17 +87,21 @@ function fewShotAnswer(year: string): string {
   });
 }
 
+/**
+ * AI SDK v7 forbids system messages inside `messages` — the system prompt
+ * travels via the `instructions` option, so conversation messages are
+ * user/assistant only.
+ */
 export interface PromptMessage {
-  role: "system" | "user" | "assistant";
+  role: "user" | "assistant";
   content: string;
 }
 
-export function buildExtractionMessages(
+export function buildConversation(
   syllabusText: string,
   today: ISODate,
 ): PromptMessage[] {
   return [
-    { role: "system", content: buildSystemPrompt(today) },
     { role: "user", content: FEW_SHOT_SYLLABUS },
     { role: "assistant", content: fewShotAnswer(today.slice(0, 4)) },
     { role: "user", content: syllabusText },

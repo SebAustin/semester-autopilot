@@ -5,8 +5,9 @@ import { todayISO } from "@/lib/dates/iso";
 import { MOCK_EXTRACTION } from "@/lib/extraction/mock";
 import { preprocessSyllabus } from "@/lib/extraction/preprocess";
 import {
-  buildExtractionMessages,
+  buildConversation,
   buildRepairMessage,
+  buildSystemPrompt,
   type PromptMessage,
 } from "@/lib/extraction/prompt";
 import {
@@ -34,10 +35,11 @@ function jsonError(
   return NextResponse.json({ ok: false, error, message }, { status });
 }
 
-async function callModel(messages: PromptMessage[]) {
+async function callModel(instructions: string, messages: PromptMessage[]) {
   return generateObject({
     model: getExtractionModel(),
     schema: extractionSchema,
+    instructions,
     messages,
     temperature: 0,
   });
@@ -76,10 +78,12 @@ export async function POST(request: Request): Promise<NextResponse> {
   const text = preprocessSyllabus(
     parsed.data.text.slice(0, HARD_INPUT_CAP),
   );
-  const messages = buildExtractionMessages(text, todayISO());
+  const today = todayISO();
+  const instructions = buildSystemPrompt(today);
+  const messages = buildConversation(text, today);
 
   try {
-    const { object } = await callModel(messages);
+    const { object } = await callModel(instructions, messages);
     return NextResponse.json({ ok: true, result: object });
   } catch (firstError: unknown) {
     if (APICallError.isInstance(firstError) && firstError.statusCode === 429) {
@@ -96,7 +100,10 @@ export async function POST(request: Request): Promise<NextResponse> {
           firstError.text ?? "",
           String(firstError.cause ?? "schema mismatch"),
         );
-        const { object } = await callModel([...messages, ...repair]);
+        const { object } = await callModel(instructions, [
+          ...messages,
+          ...repair,
+        ]);
         return NextResponse.json({ ok: true, result: object });
       } catch {
         return jsonError(

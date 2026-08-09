@@ -50,8 +50,36 @@ extraction responses — everything except live LLM calls works offline.
 | `LLM_BASE_URL` | OpenAI-compatible endpoint (e.g. `https://api.featherless.ai/v1`) |
 | `LLM_API_KEY` | API key for that endpoint |
 | `LLM_MODEL_ID` | Model id (e.g. `meta-llama/Meta-Llama-3.1-70B-Instruct`) |
+| `LLM_STRUCTURED` | `1` = use OpenAI structured outputs (`json_schema`) — on for Ollama |
 | `FIRECRAWL_API_KEY` | Course-page URL import (optional) |
 | `LLM_MOCK` | `1` = fixture extraction, no network (used by e2e) |
+
+### Local dev with Ollama — no API key, fully offline
+
+Extraction talks to any OpenAI-compatible server, including
+[Ollama](https://ollama.com) on your own machine — free, private, and
+offline-capable:
+
+```bash
+ollama pull llama3.1:8b
+printf 'FROM llama3.1:8b\nPARAMETER num_ctx 16384\nPARAMETER temperature 0\n' > Modelfile
+ollama create autopilot-llama -f Modelfile && rm Modelfile
+```
+
+`.env.local`:
+
+```ini
+LLM_BASE_URL=http://127.0.0.1:11434/v1
+LLM_API_KEY=ollama
+LLM_MODEL_ID=autopilot-llama
+LLM_STRUCTURED=1
+```
+
+Notes: the `num_ctx` bump matters (Ollama's default context silently
+truncates long syllabi), `LLM_STRUCTURED=1` turns on schema-constrained
+decoding (dramatically better JSON adherence from small local models), and
+use `127.0.0.1` rather than `localhost` (Node resolves `localhost` to IPv6
+first; Ollama listens on IPv4).
 
 ### Scripts
 
