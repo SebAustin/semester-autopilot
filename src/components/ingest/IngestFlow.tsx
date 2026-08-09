@@ -9,6 +9,7 @@ import {
   type NormalizedExtraction,
 } from "@/lib/extraction/normalize";
 import type { ExtractResponse } from "@/lib/extraction/schema";
+import { matchCategoryName } from "@/lib/grades/match";
 import { extractPdfText } from "@/lib/pdf/extractText";
 import { useAppStore } from "@/lib/store/useAppStore";
 import type { SourceKind } from "@/lib/types";
@@ -108,6 +109,11 @@ export function IngestFlow() {
           title: row.title,
           type: row.type,
           dueDate: row.dueDate as string,
+          categoryName: matchCategoryName(
+            row.title,
+            row.type,
+            draft.grading.map((category) => category.name),
+          ),
           weightPct: row.weightPct ?? undefined,
           estimatedHours: row.estimatedHours,
         })),

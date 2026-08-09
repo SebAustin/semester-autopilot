@@ -69,7 +69,68 @@ const CS_2110: DemoCourse = {
   ],
 };
 
-const DEMO_COURSES: DemoCourse[] = [CS_2110];
+const HIST_2410: DemoCourse = {
+  name: "HIST 2410",
+  title: "The Atlantic World, 1450–1850",
+  grading: [
+    { name: "Participation", weight: 20 },
+    { name: "Short Essays", weight: 30 },
+    { name: "Presentation", weight: 10 },
+    { name: "Research Paper", weight: 40 },
+  ],
+  meetingDays: [
+    { days: ["Tue", "Thu"], start: "13:25", end: "14:40", kind: "lecture", location: "McGraw 165" },
+  ],
+  items: [
+    { title: "Thornton, chs. 1–3", type: "reading", offset: -5, categoryName: "Participation", status: "done" },
+    { title: "Map quiz", type: "quiz", offset: -10, categoryName: "Participation", status: "done", score: 88 },
+    { title: "Thornton, chs. 4–6", type: "reading", offset: 2, categoryName: "Participation" },
+    { title: "Essay 1 — First contacts", type: "paper", offset: 3, categoryName: "Short Essays", weightPct: 15 },
+    { title: "Primary-source presentation", type: "presentation", offset: 17, categoryName: "Presentation", weightPct: 10 },
+    { title: "Revolutions dossier reading", type: "reading", offset: 12, categoryName: "Participation" },
+    { title: "Essay 2 — Middle passage economies", type: "paper", offset: 24, categoryName: "Short Essays", weightPct: 15 },
+    { title: "Paper proposal + bibliography", type: "paper", offset: 38, categoryName: "Research Paper", estimatedHours: 3 },
+    { title: "Research paper", type: "paper", offset: 66, categoryName: "Research Paper", weightPct: 40, estimatedHours: 16 },
+  ],
+};
+
+const CHEM_1310: DemoCourse = {
+  name: "CHEM 1310",
+  title: "General Chemistry I",
+  grading: [
+    { name: "Weekly Quizzes", weight: 15 },
+    { name: "Problem Sets", weight: 10 },
+    { name: "Laboratory", weight: 25 },
+    { name: "Midterm 1", weight: 15 },
+    { name: "Midterm 2", weight: 15 },
+    { name: "Final Exam", weight: 20 },
+  ],
+  meetingDays: [
+    { days: ["Mon", "Wed", "Fri"], start: "09:05", end: "09:55", kind: "lecture", location: "Baker 200" },
+    { days: ["Thu"], start: "13:00", end: "16:00", kind: "lab", location: "Baker basement labs" },
+  ],
+  items: [
+    { title: "Quiz 1", type: "quiz", offset: -12, categoryName: "Weekly Quizzes", status: "done", score: 90 },
+    { title: "Quiz 2", type: "quiz", offset: -5, categoryName: "Weekly Quizzes", status: "done", score: 76 },
+    { title: "Quiz 3", type: "quiz", offset: 2, categoryName: "Weekly Quizzes" },
+    { title: "Quiz 4", type: "quiz", offset: 9, categoryName: "Weekly Quizzes" },
+    { title: "Quiz 5", type: "quiz", offset: 16, categoryName: "Weekly Quizzes" },
+    { title: "Quiz 6", type: "quiz", offset: 23, categoryName: "Weekly Quizzes" },
+    { title: "Quiz 7", type: "quiz", offset: 30, categoryName: "Weekly Quizzes" },
+    { title: "Problem set 3", type: "assignment", offset: 1, categoryName: "Problem Sets", estimatedHours: 2.5 },
+    { title: "Problem set 4", type: "assignment", offset: 8, categoryName: "Problem Sets", estimatedHours: 2.5 },
+    { title: "Problem set 5", type: "assignment", offset: 15, categoryName: "Problem Sets", estimatedHours: 2.5 },
+    { title: "Lab report 2 — Calorimetry", type: "assignment", offset: -3, categoryName: "Laboratory", status: "done", score: 85 },
+    { title: "Lab report 3 — Titrations", type: "assignment", offset: 4, categoryName: "Laboratory" },
+    { title: "Lab report 4 — Gas laws", type: "assignment", offset: 18, categoryName: "Laboratory" },
+    { title: "Lab report 5 — Thermodynamics", type: "assignment", offset: 32, categoryName: "Laboratory" },
+    { title: "Midterm 1", type: "exam", offset: 6, categoryName: "Midterm 1", weightPct: 15 },
+    { title: "Midterm 2", type: "exam", offset: 34, categoryName: "Midterm 2", weightPct: 15 },
+    { title: "Final exam (cumulative)", type: "exam", offset: 58, categoryName: "Final Exam", weightPct: 20, estimatedHours: 10 },
+  ],
+};
+
+const DEMO_COURSES: DemoCourse[] = [CS_2110, HIST_2410, CHEM_1310];
 
 const DEMO_AVAILABILITY: UserAvailability = {
   weeklyHours: { Mon: 2, Tue: 2.5, Wed: 2, Thu: 2.5, Fri: 1.5, Sat: 4, Sun: 3 },

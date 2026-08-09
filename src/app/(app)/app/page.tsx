@@ -1,12 +1,17 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 
 import { DemoDataButton } from "@/components/shared/DemoDataButton";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { courseChipStyle } from "@/components/shared/course-colors";
+import { IcsExportButton } from "@/components/timeline/IcsExportButton";
+import { SemesterTimeline } from "@/components/timeline/SemesterTimeline";
+import { WorkloadHeatmap } from "@/components/timeline/WorkloadHeatmap";
 import { formatLong, todayISO } from "@/lib/dates/iso";
 import { useAppStore } from "@/lib/store/useAppStore";
+import { computeTimelineRange } from "@/lib/timeline-range";
 import type { Deliverable } from "@/lib/types";
 
 const UPCOMING_LIMIT = 6;
@@ -24,8 +29,19 @@ function upcoming(
 export default function SemesterPage() {
   const courses = useAppStore((state) => state.courses);
   const deliverables = useAppStore((state) => state.deliverables);
+  const semester = useAppStore((state) => state.semester);
 
   const courseList = Object.values(courses);
+  const deliverableList = useMemo(
+    () => Object.values(deliverables),
+    [deliverables],
+  );
+  const today = todayISO();
+  const range = useMemo(
+    () => computeTimelineRange(deliverableList, semester, today),
+    [deliverableList, semester, today],
+  );
+
   if (courseList.length === 0) {
     return (
       <EmptyState
@@ -44,38 +60,53 @@ export default function SemesterPage() {
     );
   }
 
-  const today = todayISO();
   const nextUp = upcoming(deliverables, today);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
-      <h1 className="font-display text-h1 text-ink">This semester</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="font-display text-h1 text-ink">This semester</h1>
+        <IcsExportButton />
+      </div>
 
-      <section aria-label="Courses" className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {courseList.map((course) => {
-          const count = Object.values(deliverables).filter(
-            (d) => d.courseId === course.id && d.status === "pending",
-          ).length;
-          return (
-            <article
-              key={course.id}
-              className="rounded-lg border border-line bg-surface p-5"
-            >
-              <span
-                className="inline-flex rounded-sm px-2 py-0.5 text-xs font-semibold"
-                style={courseChipStyle(course.colorIndex)}
+      <section aria-label="Semester timeline" className="mt-8">
+        <SemesterTimeline
+          courses={courseList}
+          deliverables={deliverableList}
+          range={range}
+        />
+        <WorkloadHeatmap deliverables={deliverableList} weeks={range.weeks} />
+      </section>
+
+      <section aria-label="Courses" className="mt-12">
+        <h2 className="text-h2 font-display text-ink">Courses</h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {courseList.map((course) => {
+            const count = deliverableList.filter(
+              (d) => d.courseId === course.id && d.status === "pending",
+            ).length;
+            return (
+              <Link
+                key={course.id}
+                href={`/app/courses/${course.id}`}
+                className="group rounded-lg border border-line bg-surface p-5 transition-colors duration-150 hover:border-accent"
               >
-                {course.name}
-              </span>
-              <h2 className="mt-3 text-base font-medium text-ink">
-                {course.title ?? course.name}
-              </h2>
-              <p className="tnum mt-2 text-sm text-ink-faint">
-                {count} open deliverable{count === 1 ? "" : "s"}
-              </p>
-            </article>
-          );
-        })}
+                <span
+                  className="inline-flex rounded-sm px-2 py-0.5 text-xs font-semibold"
+                  style={courseChipStyle(course.colorIndex)}
+                >
+                  {course.name}
+                </span>
+                <h3 className="mt-3 text-base font-medium text-ink group-hover:text-accent-strong">
+                  {course.title ?? course.name}
+                </h3>
+                <p className="tnum mt-2 text-sm text-ink-faint">
+                  {count} open deliverable{count === 1 ? "" : "s"}
+                </p>
+              </Link>
+            );
+          })}
+        </div>
       </section>
 
       <section aria-label="Next deadlines" className="mt-12">
