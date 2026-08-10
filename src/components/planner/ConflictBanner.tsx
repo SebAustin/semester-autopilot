@@ -1,5 +1,7 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
+
 import type { PlanConflict } from "@/lib/types";
 
 const KIND_STYLES: Record<
@@ -28,27 +30,36 @@ type Props = {
 };
 
 export function ConflictBanner({ conflicts }: Props) {
-  if (conflicts.length === 0) return null;
-
   return (
-    <section aria-label="Plan conflicts" className="grid gap-2">
-      {conflicts.map((conflict, index) => {
-        const style = KIND_STYLES[conflict.kind];
-        return (
-          <div
-            key={`${conflict.kind}-${conflict.weekStart ?? index}`}
-            role="status"
-            className={`flex items-baseline gap-3 rounded-md border px-4 py-2.5 ${style.container}`}
-          >
-            <span
-              className={`shrink-0 text-xs font-semibold uppercase tracking-wide ${style.label}`}
-            >
-              {style.labelText}
-            </span>
-            <p className="text-sm text-ink-soft">{conflict.message}</p>
-          </div>
-        );
-      })}
-    </section>
+    <AnimatePresence initial={false}>
+      {conflicts.length > 0 ? (
+        <motion.section
+          aria-label="Plan conflicts"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.25, ease: [0.2, 0, 0, 1] }}
+          className="grid gap-2"
+        >
+          {conflicts.map((conflict, index) => {
+            const style = KIND_STYLES[conflict.kind];
+            return (
+              <div
+                key={`${conflict.kind}-${conflict.weekStart ?? index}`}
+                role="status"
+                className={`flex items-baseline gap-3 rounded-md border px-4 py-2.5 ${style.container}`}
+              >
+                <span
+                  className={`shrink-0 text-xs font-semibold uppercase tracking-wide ${style.label}`}
+                >
+                  {style.labelText}
+                </span>
+                <p className="text-sm text-ink-soft">{conflict.message}</p>
+              </div>
+            );
+          })}
+        </motion.section>
+      ) : null}
+    </AnimatePresence>
   );
 }

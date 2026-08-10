@@ -4,6 +4,7 @@ import { use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { GradePanel } from "@/components/grades/GradePanel";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { courseChipStyle } from "@/components/shared/course-colors";
 import { formatLong } from "@/lib/dates/iso";
@@ -91,6 +92,8 @@ export default function CoursePage({
           Remove course
         </button>
       </header>
+
+      <GradePanel course={course} courseDeliverables={courseDeliverables} />
 
       {course.grading.categories.length > 0 ? (
         <section aria-label="Grading scheme" className="mt-8">
