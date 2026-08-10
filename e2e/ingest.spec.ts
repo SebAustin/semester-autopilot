@@ -8,7 +8,7 @@ test("link import scrapes (mock) and reaches review", async ({ page }) => {
     .getByLabel("Course page URL")
     .fill("https://cs.example.edu/courses/3110");
   await page.getByRole("button", { name: "Import" }).click();
-  await expect(page.getByText(/review what the AI read/i)).toBeVisible({
+  await expect(page.getByText(/review what the AI found/i)).toBeVisible({
     timeout: 15_000,
   });
   await expect(page.getByText(/dated deliverables ready/)).toBeVisible();
