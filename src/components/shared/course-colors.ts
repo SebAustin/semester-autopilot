@@ -6,7 +6,7 @@ import type { CourseColorIndex } from "@/lib/types";
 export function courseChipStyle(index: CourseColorIndex): CSSProperties {
   return {
     backgroundColor: `var(--color-course-${index}-soft)`,
-    color: `var(--color-course-${index})`,
+    color: `var(--color-course-${index}-text)`,
   };
 }
 

@@ -13,17 +13,17 @@ const KIND_STYLES: Record<
 > = {
   "due-date-passed": {
     container: "border-danger/30 bg-danger-soft",
-    label: "text-danger",
+    label: "text-danger-strong",
     labelText: "Past due",
   },
   "impossible-deadline": {
     container: "border-danger/30 bg-danger-soft",
-    label: "text-danger",
+    label: "text-danger-strong",
     labelText: "Won't fit",
   },
   "overcommitted-week": {
     container: "border-warn/40 bg-warn-soft",
-    label: "text-warn",
+    label: "text-warn-strong",
     labelText: "Heavy week",
   },
 };

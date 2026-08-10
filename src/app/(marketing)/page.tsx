@@ -117,13 +117,13 @@ export default function LandingPage() {
         </h2>
         <div className="grid gap-4 md:grid-cols-6">
           <div className="rounded-lg bg-accent p-6 text-white md:col-span-3">
-            <p className="text-xs font-semibold uppercase tracking-wide opacity-80">
+            <p className="text-xs font-semibold uppercase tracking-wide">
               The reroute
             </p>
             <p className="mt-3 font-display text-2xl leading-snug">
               {"Tap “I'm busy” on any day — watch two weeks of work reflow around it, like GPS around traffic."}
             </p>
-            <p className="mt-3 text-sm opacity-80">
+            <p className="mt-3 text-sm">
               And when something genuinely no longer fits, it says so, in
               plain language — never silently overbooks you.
             </p>
@@ -185,7 +185,7 @@ export default function LandingPage() {
             <p className="text-sm leading-relaxed text-ink-soft">
               AI touches exactly one thing: reading your syllabus. It never
               invents a date — anything unclear is flagged{" "}
-              <span className="font-medium text-warn">needs a date</span> with
+              <span className="font-medium text-warn-strong">needs a date</span> with
               the verbatim source text, and you approve every row before it
               counts.
             </p>

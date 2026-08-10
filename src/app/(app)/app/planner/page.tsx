@@ -52,7 +52,7 @@ export default function PlannerPage() {
             <span className="text-ink-faint"> · busiest week {busiest[1]}h</span>
           ) : null}
           {plan.conflicts.length > 0 ? (
-            <span className="text-danger">
+            <span className="text-danger-strong">
               {" "}
               · {plan.conflicts.length} conflict
               {plan.conflicts.length === 1 ? "" : "s"}

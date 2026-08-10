@@ -85,8 +85,8 @@ export function DayCell({
         }
         className={`mt-1.5 rounded-sm px-1.5 py-0.5 text-[10px] font-medium transition-colors duration-150 ${
           isBlackout
-            ? "bg-warn text-white hover:opacity-85"
-            : "border border-line text-ink-faint hover:border-warn hover:text-warn"
+            ? "bg-warn-strong text-white hover:opacity-85"
+            : "border border-line text-ink-faint hover:border-warn-strong hover:text-warn-strong"
         }`}
       >
         {isBlackout ? "busy — undo" : "I'm busy"}
@@ -112,7 +112,7 @@ export function DayCell({
           <p className="mt-4 text-center text-[10px] text-ink-faint">free</p>
         ) : null}
         {isBlackout ? (
-          <p className="mt-4 text-center text-[10px] text-warn">
+          <p className="mt-4 text-center text-[10px] text-warn-strong">
             rerouted around this day
           </p>
         ) : null}

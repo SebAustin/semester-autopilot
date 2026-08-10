@@ -50,7 +50,7 @@ export function WhatIfSlider({
       {skipImpact !== null && skipImpact < 0 ? (
         <p className="tnum mt-1 text-[11px] text-ink-faint">
           skipping this costs{" "}
-          <span className="font-medium text-danger">{skipImpact} pts</span> off
+          <span className="font-medium text-danger-strong">{skipImpact} pts</span> off
           your final grade
         </p>
       ) : null}

@@ -75,7 +75,7 @@ export function ReviewTable({ rows, undated, onRowsChange }: Props) {
 
       {undated.length > 0 ? (
         <section aria-label="Needs a date" className="mt-6">
-          <h3 className="text-sm font-semibold text-warn">
+          <h3 className="text-sm font-semibold text-warn-strong">
             Needs a date — the AI wouldn&apos;t guess
           </h3>
           <ul className="mt-2 divide-y divide-line rounded-lg border border-warn/30 bg-surface">

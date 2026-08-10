@@ -24,6 +24,36 @@ const noopStorage = {
   removeItem: () => undefined,
 };
 
+interface StringStorage {
+  getItem: (key: string) => string | null;
+  setItem: (key: string, value: string) => void;
+  removeItem: (key: string) => void;
+}
+
+/**
+ * Self-healing storage: a corrupted persisted blob (manual edits, quota
+ * truncation, extension damage) is discarded instead of breaking every
+ * subsequent load. Losing broken state beats a white screen.
+ */
+function selfHealingStorage(): StringStorage {
+  return {
+    getItem: (key: string) => {
+      const raw = window.localStorage.getItem(key);
+      if (raw === null) return null;
+      try {
+        JSON.parse(raw);
+        return raw;
+      } catch {
+        window.localStorage.removeItem(key);
+        return null;
+      }
+    },
+    setItem: (key: string, value: string) =>
+      window.localStorage.setItem(key, value),
+    removeItem: (key: string) => window.localStorage.removeItem(key),
+  };
+}
+
 export const DEFAULT_AVAILABILITY: UserAvailability = {
   weeklyHours: { Mon: 2, Tue: 2, Wed: 2, Thu: 2, Fri: 2, Sat: 4, Sun: 3 },
   blackoutDates: [],
@@ -226,7 +256,7 @@ export const useAppStore = create<AppState>()(
       name: "semester-autopilot-v1",
       version: 1,
       storage: createJSONStorage(() =>
-        typeof window === "undefined" ? noopStorage : window.localStorage,
+        typeof window === "undefined" ? noopStorage : selfHealingStorage(),
       ),
       skipHydration: true,
       partialize: (state): PersistedState => ({

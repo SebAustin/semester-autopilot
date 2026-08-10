@@ -135,7 +135,7 @@ export function ReviewPanel({ draft, onChange, onCommit, onCancel }: Props) {
           aria-label="Extraction warnings"
           className="mt-6 rounded-md border border-warn/30 bg-warn-soft px-4 py-3"
         >
-          <p className="text-xs font-semibold uppercase tracking-wide text-warn">
+          <p className="text-xs font-semibold uppercase tracking-wide text-warn-strong">
             The AI flagged
           </p>
           <ul className="mt-1.5 list-disc pl-4 text-sm text-ink-soft">
