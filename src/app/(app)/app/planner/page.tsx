@@ -70,8 +70,8 @@ export default function PlannerPage() {
 
       <p className="mt-6 text-xs text-ink-faint">
         The plan recomputes instantly from your deadlines, grade weights, and
-        hours — deterministic, no AI involved. Tomorrow&apos;s build: mark a day
-        as missed and watch it reroute.
+        hours — deterministic, no AI involved. Same inputs, same plan, every
+        time.
       </p>
     </div>
   );
