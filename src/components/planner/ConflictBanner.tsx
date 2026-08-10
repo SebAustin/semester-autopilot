@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
 import type { PlanConflict } from "@/lib/types";
+
+const VISIBLE_BY_DEFAULT = 2;
 
 const KIND_STYLES: Record<
   PlanConflict["kind"],
@@ -30,6 +33,12 @@ type Props = {
 };
 
 export function ConflictBanner({ conflicts }: Props) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const visible = isExpanded
+    ? conflicts
+    : conflicts.slice(0, VISIBLE_BY_DEFAULT);
+  const hiddenCount = conflicts.length - visible.length;
+
   return (
     <AnimatePresence initial={false}>
       {conflicts.length > 0 ? (
@@ -41,7 +50,7 @@ export function ConflictBanner({ conflicts }: Props) {
           transition={{ duration: 0.25, ease: [0.2, 0, 0, 1] }}
           className="grid gap-2"
         >
-          {conflicts.map((conflict, index) => {
+          {visible.map((conflict, index) => {
             const style = KIND_STYLES[conflict.kind];
             return (
               <div
@@ -58,6 +67,17 @@ export function ConflictBanner({ conflicts }: Props) {
               </div>
             );
           })}
+          {hiddenCount > 0 || isExpanded ? (
+            <button
+              type="button"
+              onClick={() => setIsExpanded((prev) => !prev)}
+              className="justify-self-start text-xs font-medium text-ink-faint transition-colors duration-150 hover:text-accent"
+            >
+              {isExpanded
+                ? "Show fewer"
+                : `Show ${hiddenCount} more conflict${hiddenCount === 1 ? "" : "s"}`}
+            </button>
+          ) : null}
         </motion.section>
       ) : null}
     </AnimatePresence>

@@ -17,7 +17,7 @@ import { EFFORT_DEFAULTS } from "../types";
  */
 
 /** Bump when demo content changes — stale persisted demos auto-refresh. */
-export const DEMO_VERSION = 2;
+export const DEMO_VERSION = 3;
 
 export interface DemoData {
   courses: Record<string, Course>;
@@ -62,11 +62,11 @@ const CS_2110: DemoCourse = {
     { title: "HW 1 — Recursion warm-up", type: "assignment", offset: -16, categoryName: "Homework", status: "done", score: 92 },
     { title: "HW 2 — Linked lists", type: "assignment", offset: -9, categoryName: "Homework", status: "done", score: 85 },
     { title: "HW 3 — Trees & traversal", type: "assignment", offset: -2, categoryName: "Homework", status: "done", score: 78 },
-    { title: "HW 4 — Hash tables", type: "assignment", offset: 5, categoryName: "Homework" },
-    { title: "Project 1 — Text adventure engine", type: "project", offset: 9, categoryName: "Projects", estimatedHours: 12 },
-    { title: "HW 5 — Graphs", type: "assignment", offset: 16, categoryName: "Homework" },
-    { title: "Midterm exam", type: "exam", offset: 13, categoryName: "Midterm", weightPct: 20 },
-    { title: "HW 6 — Concurrency", type: "assignment", offset: 26, categoryName: "Homework" },
+    { title: "HW 4 — Hash tables", type: "assignment", offset: 6, categoryName: "Homework", estimatedHours: 2 },
+    { title: "Project 1 — Text adventure engine", type: "project", offset: 12, categoryName: "Projects", estimatedHours: 10 },
+    { title: "HW 5 — Graphs", type: "assignment", offset: 17, categoryName: "Homework", estimatedHours: 2.5 },
+    { title: "Midterm exam", type: "exam", offset: 16, categoryName: "Midterm", weightPct: 20, estimatedHours: 7 },
+    { title: "HW 6 — Concurrency", type: "assignment", offset: 27, categoryName: "Homework", estimatedHours: 2.5 },
     { title: "Project 2 — Pathfinding visualizer", type: "project", offset: 38, categoryName: "Projects", estimatedHours: 14 },
     { title: "Final exam", type: "exam", offset: 52, categoryName: "Final", weightPct: 25, estimatedHours: 10 },
   ],
@@ -87,11 +87,11 @@ const HIST_2410: DemoCourse = {
   items: [
     { title: "Thornton, chs. 1–3", type: "reading", offset: -5, categoryName: "Participation", status: "done" },
     { title: "Map quiz", type: "quiz", offset: -10, categoryName: "Participation", status: "done", score: 88 },
-    { title: "Thornton, chs. 4–6", type: "reading", offset: 2, categoryName: "Participation" },
-    { title: "Essay 1 — First contacts", type: "paper", offset: 3, categoryName: "Short Essays", weightPct: 15 },
-    { title: "Primary-source presentation", type: "presentation", offset: 17, categoryName: "Presentation", weightPct: 10 },
-    { title: "Revolutions dossier reading", type: "reading", offset: 12, categoryName: "Participation" },
-    { title: "Essay 2 — Middle passage economies", type: "paper", offset: 24, categoryName: "Short Essays", weightPct: 15 },
+    { title: "Thornton, chs. 4–6", type: "reading", offset: 4, categoryName: "Participation" },
+    { title: "Essay 1 — First contacts", type: "paper", offset: 7, categoryName: "Short Essays", weightPct: 15, estimatedHours: 5 },
+    { title: "Primary-source presentation", type: "presentation", offset: 19, categoryName: "Presentation", weightPct: 10 },
+    { title: "Revolutions dossier reading", type: "reading", offset: 14, categoryName: "Participation" },
+    { title: "Essay 2 — Middle passage economies", type: "paper", offset: 26, categoryName: "Short Essays", weightPct: 15, estimatedHours: 5 },
     { title: "Paper proposal + bibliography", type: "paper", offset: 38, categoryName: "Research Paper", estimatedHours: 3 },
     { title: "Research paper", type: "paper", offset: 66, categoryName: "Research Paper", weightPct: 40, estimatedHours: 16 },
   ],
@@ -115,20 +115,20 @@ const CHEM_1310: DemoCourse = {
   items: [
     { title: "Quiz 1", type: "quiz", offset: -12, categoryName: "Weekly Quizzes", status: "done", score: 90 },
     { title: "Quiz 2", type: "quiz", offset: -5, categoryName: "Weekly Quizzes", status: "done", score: 76 },
-    { title: "Quiz 3", type: "quiz", offset: 2, categoryName: "Weekly Quizzes" },
-    { title: "Quiz 4", type: "quiz", offset: 9, categoryName: "Weekly Quizzes" },
-    { title: "Quiz 5", type: "quiz", offset: 16, categoryName: "Weekly Quizzes" },
-    { title: "Quiz 6", type: "quiz", offset: 23, categoryName: "Weekly Quizzes" },
-    { title: "Quiz 7", type: "quiz", offset: 30, categoryName: "Weekly Quizzes" },
-    { title: "Problem set 3", type: "assignment", offset: 1, categoryName: "Problem Sets", estimatedHours: 2.5 },
-    { title: "Problem set 4", type: "assignment", offset: 8, categoryName: "Problem Sets", estimatedHours: 2.5 },
-    { title: "Problem set 5", type: "assignment", offset: 15, categoryName: "Problem Sets", estimatedHours: 2.5 },
+    { title: "Quiz 3", type: "quiz", offset: 4, categoryName: "Weekly Quizzes", estimatedHours: 1 },
+    { title: "Quiz 4", type: "quiz", offset: 11, categoryName: "Weekly Quizzes", estimatedHours: 1 },
+    { title: "Quiz 5", type: "quiz", offset: 18, categoryName: "Weekly Quizzes", estimatedHours: 1.5 },
+    { title: "Quiz 6", type: "quiz", offset: 25, categoryName: "Weekly Quizzes", estimatedHours: 1.5 },
+    { title: "Quiz 7", type: "quiz", offset: 32, categoryName: "Weekly Quizzes", estimatedHours: 1.5 },
+    { title: "Problem set 3", type: "assignment", offset: 3, categoryName: "Problem Sets", estimatedHours: 2 },
+    { title: "Problem set 4", type: "assignment", offset: 10, categoryName: "Problem Sets", estimatedHours: 2 },
+    { title: "Problem set 5", type: "assignment", offset: 17, categoryName: "Problem Sets", estimatedHours: 2 },
     { title: "Lab report 2 — Calorimetry", type: "assignment", offset: -3, categoryName: "Laboratory", status: "done", score: 85 },
-    { title: "Lab report 3 — Titrations", type: "assignment", offset: 4, categoryName: "Laboratory" },
-    { title: "Lab report 4 — Gas laws", type: "assignment", offset: 18, categoryName: "Laboratory" },
-    { title: "Lab report 5 — Thermodynamics", type: "assignment", offset: 32, categoryName: "Laboratory" },
-    { title: "Midterm 1", type: "exam", offset: 6, categoryName: "Midterm 1", weightPct: 15 },
-    { title: "Midterm 2", type: "exam", offset: 34, categoryName: "Midterm 2", weightPct: 15 },
+    { title: "Lab report 3 — Titrations", type: "assignment", offset: 8, categoryName: "Laboratory", estimatedHours: 2.5 },
+    { title: "Lab report 4 — Gas laws", type: "assignment", offset: 20, categoryName: "Laboratory", estimatedHours: 2.5 },
+    { title: "Lab report 5 — Thermodynamics", type: "assignment", offset: 34, categoryName: "Laboratory", estimatedHours: 2.5 },
+    { title: "Midterm 1", type: "exam", offset: 9, categoryName: "Midterm 1", weightPct: 15, estimatedHours: 6 },
+    { title: "Midterm 2", type: "exam", offset: 36, categoryName: "Midterm 2", weightPct: 15, estimatedHours: 6 },
     { title: "Final exam (cumulative)", type: "exam", offset: 58, categoryName: "Final Exam", weightPct: 20, estimatedHours: 10 },
   ],
 };
@@ -136,7 +136,7 @@ const CHEM_1310: DemoCourse = {
 const DEMO_COURSES: DemoCourse[] = [CS_2110, HIST_2410, CHEM_1310];
 
 const DEMO_AVAILABILITY: UserAvailability = {
-  weeklyHours: { Mon: 2, Tue: 2.5, Wed: 2, Thu: 2.5, Fri: 1.5, Sat: 4, Sun: 3 },
+  weeklyHours: { Mon: 3, Tue: 3, Wed: 3, Thu: 3, Fri: 3, Sat: 5, Sun: 4 },
   blackoutDates: [],
 };
 
