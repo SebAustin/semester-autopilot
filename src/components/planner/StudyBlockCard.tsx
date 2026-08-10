@@ -12,16 +12,16 @@ type Props = {
 };
 
 /**
- * `layout` + the engine's stable chronological keys (`taskId#n`) are what
- * produce the GPS-reroute cascade: when a day is blacked out, each chunk's
- * key survives while its date shifts, so cards visibly slide to their new
- * days instead of blinking in and out.
+ * Reroute motion = within-day `layout` reflow + enter/exit crossfade + the
+ * day-column pulse. Deliberately NOT shared-element (`layoutId`) transitions:
+ * mass plan swaps (demo refresh, availability changes) left cross-cell
+ * projections stranded mid-flight. The crossfade is the plan's sanctioned
+ * fallback — robust under any swap size.
  */
 export function StudyBlockCard({ block, course, deliverable }: Props) {
   return (
     <motion.div
       layout
-      layoutId={block.key}
       initial={{ opacity: 0, scale: 0.92 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.92 }}
