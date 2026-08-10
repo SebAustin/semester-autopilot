@@ -16,15 +16,15 @@ export function AppNav() {
     <header className="border-b border-line bg-surface">
       <nav
         aria-label="Main navigation"
-        className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-6"
+        className="mx-auto flex min-h-14 w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 px-4 sm:px-6"
       >
         <Link
           href="/"
-          className="font-display text-lg tracking-tight text-ink hover:text-accent"
+          className="py-3 font-display text-base tracking-tight text-ink hover:text-accent sm:text-lg"
         >
           Semester&nbsp;Autopilot
         </Link>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 overflow-x-auto pb-2 max-sm:w-full sm:pb-0">
           {LINKS.map((link) => {
             const isActive =
               link.href === "/app"

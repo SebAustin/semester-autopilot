@@ -2,6 +2,18 @@ import path from "node:path";
 
 import { expect, test } from "@playwright/test";
 
+test("link import scrapes (mock) and reaches review", async ({ page }) => {
+  await page.goto("/app/ingest");
+  await page
+    .getByLabel("Course page URL")
+    .fill("https://cs.example.edu/courses/3110");
+  await page.getByRole("button", { name: "Import" }).click();
+  await expect(page.getByText(/review what the AI read/i)).toBeVisible({
+    timeout: 15_000,
+  });
+  await expect(page.getByText(/dated deliverables ready/)).toBeVisible();
+});
+
 const REVIEW_HEADING = /your call on every row/i;
 
 test("paste → review → commit adds the course to the semester", async ({

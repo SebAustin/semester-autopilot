@@ -18,6 +18,7 @@ import { ExtractionProgress } from "./ExtractionProgress";
 import { PasteTextCard } from "./PasteTextCard";
 import { ReviewPanel } from "./ReviewPanel";
 import { UploadDropzone } from "./UploadDropzone";
+import { UrlScrapeCard } from "./UrlScrapeCard";
 
 const MAX_PDF_BYTES = 10 * 1024 * 1024;
 const FETCH_TIMEOUT_MS = 75_000;
@@ -163,6 +164,7 @@ export function IngestFlow() {
       <div className="mt-8 grid gap-6">
         <UploadDropzone onFile={handleFile} />
         <PasteTextCard onSubmit={(text) => runExtraction(text, "text")} />
+        <UrlScrapeCard onText={(markdown) => runExtraction(markdown, "url")} />
       </div>
     </div>
   );
