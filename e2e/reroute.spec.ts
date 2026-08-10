@@ -28,7 +28,11 @@ test("marking a day busy reroutes its work; undo restores it", async ({
 
   await cell.getByRole("button", { name: /^Mark .* as busy$/ }).click();
 
-  // The day empties and shows the rerouted state.
+  // The day empties and shows the rerouted state. The extra settle wait
+  // guards against zombie exit cards (popLayout requires ref forwarding —
+  // regression would leave cards mounted long after the animation window).
+  await expect(cell.getByTestId("study-block")).toHaveCount(0);
+  await page.waitForTimeout(1500);
   await expect(cell.getByTestId("study-block")).toHaveCount(0);
   await expect(cell).toHaveAttribute("data-planned", "0");
   await expect(cell.getByText(/rerouted around this day/i)).toBeVisible();

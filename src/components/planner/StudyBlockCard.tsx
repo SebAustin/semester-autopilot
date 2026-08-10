@@ -1,5 +1,6 @@
 "use client";
 
+import type { Ref } from "react";
 import { motion } from "motion/react";
 
 import { courseChipStyle } from "@/components/shared/course-colors";
@@ -9,6 +10,12 @@ type Props = {
   block: StudyBlock;
   course: Course;
   deliverable: Deliverable;
+  /**
+   * AnimatePresence `popLayout` measures exiting children through their ref —
+   * custom components MUST forward it to the motion element or exits never
+   * complete (zombie cards).
+   */
+  ref?: Ref<HTMLDivElement>;
 };
 
 /**
@@ -18,9 +25,10 @@ type Props = {
  * projections stranded mid-flight. The crossfade is the plan's sanctioned
  * fallback — robust under any swap size.
  */
-export function StudyBlockCard({ block, course, deliverable }: Props) {
+export function StudyBlockCard({ block, course, deliverable, ref }: Props) {
   return (
     <motion.div
+      ref={ref}
       layout
       initial={{ opacity: 0, scale: 0.92 }}
       animate={{ opacity: 1, scale: 1 }}
