@@ -15,7 +15,7 @@
  *   node scripts/assemble-demo.mjs
  */
 import { execFileSync } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { chromium } from "@playwright/test";
@@ -39,10 +39,13 @@ const ENC = [
   "-r", "30", "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-ac", "2",
 ];
 
-const LEAD_S = 0.35; // silence before narration starts in each beat
-const TAIL_S = 0.35; // breathing room after it ends
+const LEAD_S = 0.28; // silence before narration starts in each beat
+const TAIL_S = 0.22; // breathing room after it ends (kept tight: the pads of
+                     // adjacent beats stack into one gap at every cut)
 const TITLE_S = 3.0;
-const ENDCARD_S = 4.5;
+const ENDCARD_S = 3.2;
+/** Past this, stretching the picture reads worse than holding a frame. */
+const MAX_STRETCH = 1.35;
 
 /** Narration text per beat — must match video/build/narration.sh verbatim. */
 const NARRATION = [
@@ -94,6 +97,49 @@ async function renderCards() {
     await page.screenshot({ path: `${BUILD}/${name}.png` });
   }
   await browser.close();
+}
+
+const VENC = [
+  "-c:v", "libx264", "-preset", "medium", "-crf", "20",
+  "-pix_fmt", "yuv420p", "-r", "30", "-an",
+];
+
+/**
+ * Applies the recorder's speed ramps: the reroute is stretched so the reflow
+ * is visible, the model's thinking time is compressed so it isn't dead air.
+ * Everything outside a ramp window plays at natural speed.
+ */
+function shapeClip(input, ramps, outFile) {
+  if (!ramps || ramps.length === 0) return input;
+
+  const duration = probe(input);
+  const parts = [];
+  let cursor = 0;
+  for (const ramp of [...ramps].sort((a, b) => a.start - b.start)) {
+    const start = Math.max(cursor, Math.min(ramp.start, duration));
+    const end = Math.max(start, Math.min(ramp.end, duration));
+    if (start > cursor) parts.push({ start: cursor, end: start, factor: 1 });
+    if (end > start) parts.push({ start, end, factor: ramp.factor });
+    cursor = end;
+  }
+  if (cursor < duration) parts.push({ start: cursor, end: duration, factor: 1 });
+
+  const trims = parts
+    .map(
+      (part, i) =>
+        `[0:v]trim=start=${part.start.toFixed(3)}:end=${part.end.toFixed(3)},` +
+        `setpts=(PTS-STARTPTS)*${part.factor}[p${i}]`,
+    )
+    .join(";");
+  const joined = parts.map((_, i) => `[p${i}]`).join("");
+
+  ff([
+    "-i", input,
+    "-filter_complex",
+    `${trims};${joined}concat=n=${parts.length}:v=1:a=0[v]`,
+    "-map", "[v]", ...VENC, outFile,
+  ]);
+  return outFile;
 }
 
 function stillSegment(png, seconds, outFile) {
@@ -294,22 +340,36 @@ await renderCards();
 stillSegment(`${BUILD}/title.png`, TITLE_S, `${SEG}/seg-0.mp4`);
 process.stdout.write(`seg-0  title card ${TITLE_S}s\n`);
 
+const manifestPath = `${BUILD}/clips/manifest.json`;
+const manifest = existsSync(manifestPath)
+  ? JSON.parse(readFileSync(manifestPath, "utf8"))
+  : {};
+
 const beats = [];
 let timeline = TITLE_S;
 
 for (let n = 1; n <= 8; n += 1) {
-  const clip = `${BUILD}/clips/beat-${n}.webm`;
+  const raw = `${BUILD}/clips/beat-${n}.webm`;
+  const clip = shapeClip(raw, manifest[`beat-${n}`], `${BUILD}/clips/shaped-${n}.mp4`);
   const audio = `${BUILD}/n${n}.aiff`;
   const clipDuration = probe(clip);
   const audioDuration = probe(audio);
   const target = audioDuration + LEAD_S + TAIL_S;
 
-  // Fit picture to narration: compress if the clip runs long, hold the last
-  // frame if it runs short. Never leave narration talking over a black frame.
-  const videoFilter =
-    clipDuration >= target
-      ? `setpts=PTS*${(target / clipDuration).toFixed(5)},fps=30`
-      : `fps=30,tpad=stop_mode=clone:stop_duration=${(target - clipDuration).toFixed(3)}`;
+  // Fit picture to narration. Running long: compress. Running short: stretch
+  // gently first — a slightly slowed screen recording reads better than a
+  // frozen frame — and only hold the last frame beyond that.
+  let videoFilter;
+  if (clipDuration >= target) {
+    videoFilter = `setpts=PTS*${(target / clipDuration).toFixed(5)},fps=30`;
+  } else if (target / clipDuration <= MAX_STRETCH) {
+    videoFilter = `setpts=PTS*${(target / clipDuration).toFixed(5)},fps=30`;
+  } else {
+    const stretched = clipDuration * MAX_STRETCH;
+    videoFilter =
+      `setpts=PTS*${MAX_STRETCH},fps=30,` +
+      `tpad=stop_mode=clone:stop_duration=${(target - stretched).toFixed(3)}`;
+  }
 
   ff([
     "-i", clip, "-i", audio,
